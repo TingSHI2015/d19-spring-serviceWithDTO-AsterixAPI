@@ -13,10 +13,11 @@ import java.util.List;
 public class AsterixController {
     private final AsterixService asterixService;
 
-    @GetMapping("/characters")
+//collision: @GetMapping("/characters") from Method 'getAllCharactersByAge'
+/*    @GetMapping("/characters")
     public List<Character> getAllCharacters(){
         return asterixService.getAll();
-    }
+    }*/
 
     @GetMapping("/characters/{id}")
     public Character getCharacterById(@PathVariable String id){
@@ -54,5 +55,20 @@ public class AsterixController {
         asterixService.deleteCharacterById(id);
     }
 
+//collision: @GetMapping("/characters") from Method 'getAllCharacters'
+/*    @GetMapping("/characters")
+    public List<CharacterDTO> getAllCharactersByAge(@RequestParam int age){
+        return asterixService.getAllCharactersByAge(age);
+    }*/
+
+    @GetMapping("/characters")
+    public List<CharacterDTO> getCharacters(@RequestParam(required = false) Integer age){   //age must be Integer!
+        if ((age!=null)){
+            return asterixService.getAllCharactersByAge(age);
+        }
+        else{
+            return asterixService.getAll();
+        }
+    }
 
 }

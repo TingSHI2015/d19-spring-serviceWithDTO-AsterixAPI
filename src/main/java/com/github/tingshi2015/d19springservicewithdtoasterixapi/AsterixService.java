@@ -13,8 +13,11 @@ public class AsterixService {
     private final AsterixRepo asterixRepo;
     private final IdService idService;
 
-    public List<Character> getAll() {
-        return asterixRepo.findAll();
+    public List<CharacterDTO> getAll() {
+        List<Character> charactersFromDB = asterixRepo.findAll();
+        return charactersFromDB.stream()
+                .map(character -> new CharacterDTO(character.name(),character.age(), character.profession()))
+                .toList();
     }
 
     public Character getCharacterById(String id) {
@@ -53,4 +56,13 @@ public class AsterixService {
             throw new NoSuchElementException("This id:" + id + " doesn't exist!");
         }
     }
+
+    public List<CharacterDTO> getAllCharactersByAge(int age) {
+            List<Character> charactersFromDB = asterixRepo.queryAllByAge(age);
+            return charactersFromDB.stream()
+    //wrong:        .map(Character -> CharacterDTO)
+                    .map(character -> new CharacterDTO(character.name(), character.age(), character.profession()))
+                    .toList();
+    }
+
 }
