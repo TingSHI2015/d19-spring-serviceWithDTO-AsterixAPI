@@ -11,6 +11,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AsterixService {
     private final AsterixRepo asterixRepo;
+    private final IdService idService;
 
     public List<Character> getAll() {
         return asterixRepo.findAll();
@@ -29,7 +30,8 @@ public class AsterixService {
 
 //POST with DTO, return also DTO
     public CharacterDTO createCharacter(CharacterDTO characterDTO) {
-        Character characterToDB = new Character(UUID.randomUUID().toString(),characterDTO.name(), characterDTO.age(), characterDTO.profession());
+        //Character characterToDB = new Character(UUID.randomUUID().toString(),characterDTO.name(), characterDTO.age(), characterDTO.profession());
+        Character characterToDB = new Character(idService.randomId(), characterDTO.name(), characterDTO.age(), characterDTO.profession());
         Character characterFromDB = asterixRepo.save(characterToDB);
         CharacterDTO characterToController = new CharacterDTO(characterFromDB.name(), characterFromDB.age(), characterDTO.profession());
         return characterToController;
